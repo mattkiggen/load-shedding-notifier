@@ -20,6 +20,9 @@
       "http": {
         "all": true,
         "scope": ["https://developer.sepush.co.za/*"]
+      },
+      "notification": {
+        "all": true
       }
     },
     "bundle": {
