@@ -1,18 +1,12 @@
 import { Button } from '@chakra-ui/react';
-import {
-  isPermissionGranted,
-  sendNotification,
-} from '@tauri-apps/api/notification';
+import { isPermissionGranted } from '@tauri-apps/api/notification';
+import { invoke } from '@tauri-apps/api/tauri';
 
 function MainPage() {
   async function showNotification() {
     const permissionGranted = await isPermissionGranted();
-
     if (permissionGranted) {
-      sendNotification({
-        title: '🚨 Load Shedding Soon 🚨',
-        body: 'Load shedding is starting in 5mins, make sure to save your work and shutdown.',
-      });
+      await invoke('notify');
     }
   }
 

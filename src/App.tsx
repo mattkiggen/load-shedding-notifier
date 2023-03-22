@@ -1,16 +1,16 @@
-import { Button } from '@chakra-ui/react';
-import { useState } from 'react';
-import MainPage from './pages/MainPage';
-import SettingsPage from './pages/SettingsPage';
+import { Outlet } from 'react-router-dom';
+import { Box } from '@chakra-ui/react';
+
+import Navigation from './components/Navigation';
 
 function App() {
-  const [route, setRoute] = useState(<MainPage />);
   return (
-    <>
-      {route}
-      <Button onClick={() => setRoute(<MainPage />)}>Main</Button>
-      <Button onClick={() => setRoute(<SettingsPage />)}>Settings</Button>
-    </>
+    <Box padding='24px'>
+      <Box mb='24px'>
+        <Navigation />
+      </Box>
+      <Outlet />
+    </Box>
   );
 }
 
