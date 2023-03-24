@@ -26,7 +26,7 @@ function SettingsPage() {
 
   useEffect(() => {
     const key = getApiKey();
-    if (key) setApiKey(key);
+    if (key) setApiKeyState(key);
   }, []);
 
   return (

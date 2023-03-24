@@ -6,6 +6,7 @@ import { getLoadsheddingStatus, LoadsheddingStatusResponse } from './core/http';
 import { DataContext } from './core/context';
 
 import Navigation from './components/Navigation';
+import { handleNotification } from './core/notification';
 
 function App() {
   const [data, setData] = useState<LoadsheddingStatusResponse | null>(null);
@@ -13,8 +14,12 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getLoadsheddingStatus();
-      if (response === null) console.log('Error fetching data');
+      if (response === null) return console.log('Error fetching data');
+
       setData(response);
+
+      if (response.events.length > 0)
+        await handleNotification(response.events[0].start);
     };
 
     const fetchDataInterval = setInterval(fetchData, 1000 * 60 * 60); // 1000ms * 60s * 60m = 1 hour
