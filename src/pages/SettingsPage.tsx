@@ -7,14 +7,15 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
+import { getApiKey, setApiKey } from '../core/storage';
 
 function SettingsPage() {
   const toast = useToast();
-  const [apiKey, setApiKey] = useState('');
+  const [apiKey, setApiKeyState] = useState('');
   const [show, setShow] = useState(false);
 
   const handleSave = () => {
-    localStorage.setItem('api-key', apiKey);
+    setApiKey(apiKey);
     toast({
       description: 'Settings saved!',
       status: 'success',
@@ -24,7 +25,7 @@ function SettingsPage() {
   };
 
   useEffect(() => {
-    const key = localStorage.getItem('api-key');
+    const key = getApiKey();
     if (key) setApiKey(key);
   }, []);
 
@@ -38,7 +39,7 @@ function SettingsPage() {
           placeholder='Your api key here'
           value={apiKey}
           type={show ? 'text' : 'password'}
-          onChange={(e) => setApiKey(e.target.value)}
+          onChange={(e) => setApiKeyState(e.target.value)}
         />
         <InputRightElement width='4.5rem'>
           <Button onClick={() => setShow(!show)} size='sm' height='1.75rem'>
