@@ -1,5 +1,5 @@
-import { Button } from '@chakra-ui/react';
 import { useContext } from 'react';
+import AreaCard from '../components/AreaCard';
 import { DataContext } from '../core/context';
 
 import { handleNotification } from '../core/notification';
@@ -15,11 +15,15 @@ function MainPage() {
   }
 
   return (
-    <div>
-      {data && <h1>{data.info.name}</h1>}
-      {data && <p>Load shedding starts at {data.events[0].start}</p>}
-      <Button onClick={showNotification}>Show notification</Button>
-    </div>
+    <>
+      {data && (
+        <AreaCard
+          areaName={data.info.name}
+          startDate={data.events[0].start}
+          endDate={data.events[0].end}
+        />
+      )}
+    </>
   );
 }
 
