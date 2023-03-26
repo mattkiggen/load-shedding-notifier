@@ -1,10 +1,10 @@
-import { useContext } from 'react';
-import AreaCard from '../components/AreaCard';
-import { DataContext } from '../core/context';
+import { useContext } from "react";
+import AreaCard from "../components/AreaCard";
+import { DataContext } from "../core/context";
 
-import { handleNotification } from '../core/notification';
+import { handleNotification } from "../core/notification";
 
-function MainPage() {
+function DashboardPage() {
   const data = useContext(DataContext);
 
   async function showNotification() {
@@ -28,4 +28,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default DashboardPage;
