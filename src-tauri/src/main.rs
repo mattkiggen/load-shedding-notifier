@@ -3,7 +3,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use notify_rust::Notification;
-use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTray};
+use tauri::{CustomMenuItem, SystemTrayMenu, SystemTray, SystemTrayEvent, AppHandle, Manager};
 
 #[tauri::command]
 fn notify() -> bool {
@@ -19,17 +19,34 @@ fn notify() -> bool {
   }
 }
 
+fn show_window_on_click(app: &AppHandle) {
+    let window = app.get_window("main");
+
+    match window {
+        Some(window) => window.show().unwrap(),
+        None => println!("Error getting window")
+    }
+}
+
+fn handle_tray_item_click(id: String) {
+    match id.as_str() {
+        "quit" => std::process::exit(0),
+        _ => {}
+    }
+}
+
 fn main() {
-    let show = CustomMenuItem::new("show".to_string(), "Show");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(show)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(quit);
+    let tray_menu = SystemTrayMenu::new().add_item(quit);
     let tray = SystemTray::new().with_menu(tray_menu);
 
     tauri::Builder::default()
         .system_tray(tray)
+        .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::LeftClick { .. } => show_window_on_click(app),
+            SystemTrayEvent::MenuItemClick { id, .. } => handle_tray_item_click(id),
+            _ => {}
+        })
         .on_window_event(|event| match event.event() {
           tauri::WindowEvent::CloseRequested { api, .. } => {
             event.window().hide().unwrap();
