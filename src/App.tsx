@@ -20,6 +20,8 @@ function App() {
 
       if (response.events.length > 0)
         await handleNotification(response.events[0].start);
+
+      console.log(response);
     };
 
     const fetchDataInterval = setInterval(fetchData, 1000 * 60 * 60); // 1000ms * 60s * 60m = 1 hour

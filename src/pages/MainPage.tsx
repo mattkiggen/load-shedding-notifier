@@ -19,6 +19,7 @@ function MainPage() {
       {data && (
         <AreaCard
           areaName={data.info.name}
+          region={data.info.region}
           startDate={data.events[0].start}
           endDate={data.events[0].end}
         />
