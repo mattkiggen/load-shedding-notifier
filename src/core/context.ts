@@ -1,6 +1,4 @@
 import { createContext } from 'react';
-import { LoadsheddingStatusResponse } from './http';
+import { LoadsheddingStatus } from './types';
 
-export const DataContext = createContext<LoadsheddingStatusResponse | null>(
-  null
-);
+export const DataContext = createContext<LoadsheddingStatus | null>(null);

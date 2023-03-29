@@ -48,7 +48,7 @@
         "fullscreen": false,
         "resizable": false,
         "title": "Load Shedding Notifier",
-        "width": 800,
+        "width": 400,
         "height": 600
       }
     ],

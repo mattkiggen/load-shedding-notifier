@@ -1,41 +1,26 @@
 import { getClient } from '@tauri-apps/api/http';
-import { getApiKey } from './storage';
+import { API_KEY, AREA_ID, BASE_URL } from './constants';
+import { LoadsheddingStatus, Response } from './types';
 
-const BASE_URL = 'https://developer.sepush.co.za';
+export async function getLoadsheddingStatus(): Promise<Response> {
+  const client = await getClient();
+  const apiKey = localStorage.getItem(API_KEY);
+  const areaId = localStorage.getItem(AREA_ID);
 
-export type LoadsheddingStatusResponse = {
-  events: {
-    end: string;
-    note: string;
-    start: string;
-  }[];
-  info: {
-    name: string;
-    region: string;
-  };
-  schedule: {
-    days: {
-      date: string;
-      name: string;
-      stages: string[][];
-    }[];
-    source: string;
-  };
-};
+  const response = await client.get<LoadsheddingStatus>(
+    `${BASE_URL}/business/2.0/area?id=${areaId}`,
+    {
+      headers: { Token: apiKey },
+    }
+  );
 
-export async function getLoadsheddingStatus(): Promise<LoadsheddingStatusResponse | null> {
-  try {
-    const client = await getClient();
-    const apiKey = getApiKey();
-    const response = await client.get<LoadsheddingStatusResponse>(
-      `${BASE_URL}/business/2.0/area?id=capetown-8-fishhoek`,
-      {
-        headers: { Token: apiKey },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
+  if (response.status !== 200)
+    return {
+      error: {
+        statusCode: response.status,
+        message: 'Failed to get load shedding status',
+      },
+    };
+
+  return { data: response.data };
 }

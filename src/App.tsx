@@ -1,44 +1,37 @@
-import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import { Box } from '@chakra-ui/react';
-
-import { getLoadsheddingStatus, LoadsheddingStatusResponse } from './core/http';
-import { DataContext } from './core/context';
-
-import Navigation from './components/Navigation';
-import { handleNotification } from './core/notification';
+import { Box } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import Navigation from "./components/Navigation";
+import { getLoadsheddingStatus } from "./core/http";
 
 function App() {
-  const [data, setData] = useState<LoadsheddingStatusResponse | null>(null);
+  // const [data, setData] = useState<LoadsheddingStatus | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getLoadsheddingStatus();
-      if (response === null) return console.log('Error fetching data');
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await getLoadsheddingStatus();
+  //     if (response.error) return console.log(`Error fetching data, status: ${response.error.statusCode}`);
 
-      setData(response);
+  //     if (loadSheddingInfo !== null) {
+  //       setData(loadSheddingInfo);
+  //       await handleNotification(loadSheddingInfo.events[0].start);
+  //     }
 
-      if (response.events.length > 0)
-        await handleNotification(response.events[0].start);
+  //     console.log(loadSheddingInfo);
+  //   };
 
-      console.log(response);
-    };
+  //   const fetchDataInterval = setInterval(fetchData, 1000 * 60 * 60); // 1000ms * 60s * 60m = 1 hour
+  //   fetchData();
 
-    const fetchDataInterval = setInterval(fetchData, 1000 * 60 * 60); // 1000ms * 60s * 60m = 1 hour
-    fetchData();
-
-    return () => clearInterval(fetchDataInterval);
-  }, []);
+  //   return () => clearInterval(fetchDataInterval);
+  // }, []);
 
   return (
-    <DataContext.Provider value={data}>
-      <Box padding='24px'>
-        <Box mb='24px'>
-          <Navigation />
-        </Box>
-        <Outlet />
-      </Box>
-    </DataContext.Provider>
+    <Box p="24px">
+      <Navigation />
+      <Box h="24px" />
+      <Outlet />
+    </Box>
   );
 }
 
